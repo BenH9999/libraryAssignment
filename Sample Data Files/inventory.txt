@@ -1,0 +1,7 @@
+978-1-1234-5678-1 "The Catcher in the Rye" "J.D. Salinger" 1
+978-2-3456-7891-2 "To Kill a Mockingbird" "Harper Lee" 0
+978-3-4567-8912-3 "1984" "George Orwell" 1
+978-4-5678-9123-4 "The Great Gatsby" "F. Scott Fitzgerald" 1
+978-5-6789-1234-5 "Pride and Prejudice" "Jane Austen" 0
+978-6-7891-2345-6 "The Hobbit" "J.R.R. Tolkien" 1
+978-7-8912-3456-7 "Animal Farm" "George Orwell" 1
