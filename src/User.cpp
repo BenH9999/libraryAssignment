@@ -9,6 +9,10 @@ void User::addNewBorrowedBook(Book newBook){
     this->borrowedBooks.push_back(newBook);
 }
 
+bool User::isEmpty(){
+    return this->userID==0 && this->name == "" && this->borrowedBooks.empty();
+}
+
 /*void User::returnBorrowedBook(Book oldBook){
     std::vector<Book>::iterator it = std::find(borrowedBooks.begin(),borrowedBooks.end(),oldBook);
     size_t i;

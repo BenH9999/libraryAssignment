@@ -86,6 +86,33 @@ void searchBookByTitle(){
     l.searchBook(title);
 }
 
+void borrowReturnBook(){
+    int input;
+    std::cout << "1. Borrow Book" << std::endl;
+    std::cout << "2. Return Book" << std::endl;
+
+    std::cin >> input;
+
+    switch(input){
+        case 1:{
+            borrowBook();
+            break;
+        }
+        case 2:{
+            returnBook();
+            break;
+        }
+    }
+}
+
+void borrowBook(){
+    
+}
+
+void returnBook(){
+
+}
+
 void processInitialMenu(){
     bool finish = 0;
     int input;
@@ -108,7 +135,14 @@ void processInitialMenu(){
                 setCurrentUser();
                 break;
             }
-            case 3:
+            case 3:{
+                if(currentUser.isEmpty()){
+                    std::cout << "No user selected, please select one first" << std::endl;
+                    break;
+                }
+                borrowReturnBook();
+                break;
+            }
             case 4:{
                 std::cout << "\n";
                 l.displayAvailableBooks();

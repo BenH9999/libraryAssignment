@@ -11,6 +11,7 @@ class User{
         User();
         //~User();
         void addNewBorrowedBook(Book newBook);
+        bool isEmpty();
 
         int getUserID();
         std::string getName();

@@ -6,8 +6,9 @@ Library::Library(){
 }
 
 void Library::returnBorrowedBook(Book oldBook){
-    //std::vector<Book>::iterator it = std::find(books.begin(),books.end(),oldBook);
-    //size_t i;
+    std::vector<Book>::iterator it = std::find(books.begin(),books.end(),oldBook);
+    size_t i;
+    
 }
 
 void Library::searchBook(std::string searchTitle){
