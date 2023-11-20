@@ -5,6 +5,10 @@ User::User(){
     name = "";
 }
 
+void User::returnBook(std::vector<Book>::iterator pos){
+    this->borrowedBooks.erase(pos);
+}
+
 void User::addNewBorrowedBook(Book newBook){
     this->borrowedBooks.push_back(newBook);
 }
