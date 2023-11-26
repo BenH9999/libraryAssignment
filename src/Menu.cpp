@@ -106,11 +106,52 @@ void borrowReturnBook(){
 }
 
 void borrowBook(){
-    
+    int choice;
+    std::cout << "\nAvailable Books" << std::endl;
+    l.displayAvailableBooks();
+    std::cout << "0. Return to menu" << std::endl;
+    std::cin >> choice;
+
+    if(choice == 0){
+        std::cout << "\e[1;1H\e[2J" << std::endl;
+        processInitialMenu();
+    }
+    else{
+        Book bookToBorrow = l.findBookByISBN(l.getBooks()[choice-1].getISBN()).second;
+        l.borrowBook(bookToBorrow);
+    }
+
+    std::cout << "\e[1;1H\e[2J" << std::endl;
+    std::cout << "Book Borrowed!\n" << std::endl;
 }
 
 void returnBook(){
+    int choice;
+    std::cout << "Currently borrowed books: " << std::endl;
+    displayBorrowedBooks();
+    std::cout << "0. Return to menu" << std::endl;
+    std::cin >> choice;
 
+    if(choice == 0){
+        std::cout << "\e[1;1H\e[2J" << std::endl;
+        processInitialMenu();
+    }else{
+        Book bookToReturn = l.findBookByISBN(l.getBooks()[choice-1].getISBN()).second;
+        l.returnBorrowedBook(bookToReturn);
+    }
+
+    std::cout << "\e[1;1H\e[2J" << std::endl;
+    std::cout << "Book Returned!\n" << std::endl;
+}
+
+void displayBorrowedBooks(){
+    if(currentUser.getBorrowedBooks().size() == 0){
+        std::cout << "You have no borrowed books" << std::endl;
+    }else{
+        for(size_t i = 0; i < currentUser.getBorrowedBooks().size(); i++){
+            std::cout << i+1 << ". " << currentUser.getBorrowedBooks()[i].getTitle() << std::endl;
+        }
+    }
 }
 
 void processInitialMenu(){

@@ -142,7 +142,7 @@ std::string Library::readQuotedString(std::istringstream& iss){
 void Library::displayAvailableBooks(){
     for(size_t i = 0; i < this->books.size();i++){
         if(this->books[i].getAvailable()){
-            std::cout << this->books[i].getTitle() << std::endl;
+            std::cout << i+1 << ". " << this->books[i].getTitle() << std::endl;
         }
     }
 }

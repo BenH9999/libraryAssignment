@@ -10,5 +10,6 @@ void searchBookByTitle();
 void borrowReturnBook();
 void borrowBook();
 void returnBook();
+void displayBorrowedBooks();
 
 extern User currentUser;
