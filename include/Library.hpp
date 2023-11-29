@@ -15,7 +15,9 @@ class Library{
         void displayAvailableBooks();
         void displayAllUsers();
         void readInventory();
+        void writeInventory();
         void readUsers();
+        void writeUsers();
         std::string readQuotedString(std::istringstream& iss);
         std::pair<bool,Book> findBookByISBN(std::string isbn);
         std::pair<bool,User> findUserByUserID(int userID);

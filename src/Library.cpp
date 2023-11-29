@@ -28,6 +28,19 @@ void Library::searchBook(std::string searchTitle){
     }
 }
 
+void Library::writeInventory(){
+    std::ofstream file("Sample Data Files/inventory.txt");
+
+    for(size_t i = 0; i < books.size(); i++){
+        file << books[i].getISBN() << " ";
+        file << books[i].getTitle() << " ";
+        file << books[i].getAuthor() << " ";
+        file << books[i].getAvailable() << "\n";
+    }
+
+    file.close();
+}
+
 void Library::readInventory(){
     std::string fileNameBooks = "Sample Data Files/inventory.txt";
     std::ifstream fileBooks(fileNameBooks);
@@ -50,6 +63,19 @@ void Library::readInventory(){
         this->books.emplace_back(Book(isbn,title,author,available));
     }
     fileBooks.close();
+}
+
+void Library::writeUsers(){
+    std::ofstream file("Sample Data Files/users.txt");
+
+    for(size_t i = 0; i < users.size(); i++){
+        file << users[i].getUserID() << " ";
+        file << users[i].getName();
+        for(size_t j = 0; j < users[i].getBorrowedBooks().size();j++){
+            file << " " << users[i].getBorrowedBooks()[j].getISBN();
+        }
+        file << "\n";
+    }
 }
 
 void Library::readUsers(){

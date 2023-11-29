@@ -10,7 +10,8 @@ void displayInitialMenu(){
     std::cout << "3. Borrow/Return Books" << std::endl;
     std::cout << "4. Display available Books" << std::endl;
     std::cout << "5. Search for Book" << std::endl;
-    std::cout << "0. Exit" << std::endl;
+    //std::cout << "6. Save current Library Books and Users to file" << std::endl;
+    std::cout << "0. Save and Exit" << std::endl;
 }
 
 void addRemoveBookMenu(){
@@ -122,6 +123,8 @@ void processInitialMenu(){
         std::cin >> input;
         switch(input){
             case 0:{
+                l.writeInventory();
+                l.writeUsers();
                 finish = 1;
                 break;
             }
