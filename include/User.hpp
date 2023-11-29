@@ -11,6 +11,7 @@ class User{
         User();
         //~User();
         void addNewBorrowedBook(Book newBook);
+        void returnBook(std::vector<Book>::iterator pos);
         bool isEmpty();
 
         int getUserID();

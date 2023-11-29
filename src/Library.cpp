@@ -5,10 +5,30 @@ Library::Library(){
     readUsers();
 }
 
+void Library::borrowBook(Book newBook){
+    currentUser.addNewBorrowedBook(newBook);
+
+    for(size_t i = 0; i < books.size();i++){
+        if(newBook == books[i]){
+            books[i].setAvailable(0);
+        }
+    }
+}
+
 void Library::returnBorrowedBook(Book oldBook){
-    std::vector<Book>::iterator it = std::find(books.begin(),books.end(),oldBook);
-    size_t i;
-    
+    std::vector<Book>::iterator it = std::find(currentUser.getBorrowedBooks().begin(),currentUser.getBorrowedBooks().end(),oldBook);
+
+    if(it != this->books.end()){
+        currentUser.returnBook(it);
+    }else{
+        std::cout << "Book not found" << std::endl;
+    }
+
+    for(size_t i = 0; i < books.size(); i++){
+        if(oldBook == books[i]){
+            books[i].setAvailable(1);
+        }
+    }
 }
 
 void Library::searchBook(std::string searchTitle){
@@ -148,7 +168,7 @@ std::string Library::readQuotedString(std::istringstream& iss){
 void Library::displayAvailableBooks(){
     for(size_t i = 0; i < this->books.size();i++){
         if(this->books[i].getAvailable()){
-            std::cout << this->books[i].getTitle() << std::endl;
+            std::cout << i+1 << ". " << this->books[i].getTitle() << std::endl;
         }
     }
 }
