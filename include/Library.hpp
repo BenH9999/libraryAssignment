@@ -23,6 +23,7 @@ class Library{
         std::pair<bool,User> findUserByUserID(int userID);
         void borrowBook(Book newBook);
         void returnBorrowedBook(Book oldBook);
+        void syncUserChanges();
 
         std::vector<Book> getBooks();
         std::vector<User> getUsers();

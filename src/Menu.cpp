@@ -29,6 +29,13 @@ void addRemoveBookMenu(){
             std::cout << "Enter isbn of book" << std::endl;
             std::cin >> isbn;
 
+            for(size_t i = 0; i < l.getBooks().size(); i++){
+                if(l.getBooks()[i].getISBN() == isbn){
+                    std::cout << "Book already exists" << std::endl;
+                    return;
+                }
+            }
+
             std::cout << "Enter title of book" << std::endl;
             std::cin >> title;
 
@@ -104,6 +111,7 @@ void borrowReturnBook(){
             break;
         }
     }
+    l.syncUserChanges();
 }
 
 void borrowBook(){
@@ -128,6 +136,7 @@ void borrowBook(){
 
 void returnBook(){
     int choice;
+    std::string isbnToReturn;
     std::cout << "Currently borrowed books: " << std::endl;
     displayBorrowedBooks();
     std::cout << "0. Return to menu" << std::endl;
@@ -137,11 +146,12 @@ void returnBook(){
         std::cout << "\e[1;1H\e[2J" << std::endl;
         processInitialMenu();
     }else{
-        Book bookToReturn = l.findBookByISBN(l.getBooks()[choice-1].getISBN()).second;
+        Book bookToReturn = l.findBookByISBN(currentUser.getBorrowedBooks()[choice-1].getISBN()).second;
+        std::cout << "Book to return: " << bookToReturn.getTitle() << std::endl;
         l.returnBorrowedBook(bookToReturn);
     }
 
-    std::cout << "\e[1;1H\e[2J" << std::endl;
+    //std::cout << "\e[1;1H\e[2J" << std::endl;
     std::cout << "Book Returned!\n" << std::endl;
 }
 

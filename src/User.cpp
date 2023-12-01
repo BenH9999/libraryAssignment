@@ -17,17 +17,6 @@ bool User::isEmpty(){
     return this->userID==0 && this->name == "" && this->borrowedBooks.empty();
 }
 
-/*void User::returnBorrowedBook(Book oldBook){
-    std::vector<Book>::iterator it = std::find(borrowedBooks.begin(),borrowedBooks.end(),oldBook);
-    size_t i;
-    for(i = 0; i < borrowedBooks.size();i++){
-        if(oldBook == borrowedBooks[i])i++;
-    }
-
-    this->borrowedBooks[i].setAvailable(1);
-}*/
-
-
 int User::getUserID(){
     return this->userID;
 }
@@ -40,6 +29,10 @@ std::vector<Book> User::getBorrowedBooks(){
     return this->borrowedBooks;
 }
 
+std::vector<DVD> User::getBorrowedDVDs(){
+    return this->borrowedDVDs;
+}
+
 void User::setUserID(int newUserID){
     this->userID = newUserID;
 }
@@ -50,4 +43,8 @@ void User::setName(std::string newName){
 
 void User::setBorrowedBooks(std::vector<Book> newBorrowedBooks){
     this->borrowedBooks = newBorrowedBooks;
+}
+
+void User::setBorrowedDVDs(std::vector<DVD> newBorrowedDVDs){
+    this->borrowedDVDs = newBorrowedDVDs;
 }

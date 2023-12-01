@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include "Book.hpp"
+#include "DVD.hpp"
 
 class User{
     public:
@@ -17,10 +18,12 @@ class User{
         int getUserID();
         std::string getName();
         std::vector<Book> getBorrowedBooks();
+        std::vector<DVD> getBorrowedDVDs();
 
         void setUserID(int newUserID);
         void setName(std::string newName);
         void setBorrowedBooks(std::vector<Book> newBorrowedBooks);
+        void setBorrowedDVDs(std::vector<DVD> addNewBorrowedDVDs);
 
         bool operator==(const User& other) const {
             return userID == other.userID && name == other.name && borrowedBooks == other.borrowedBooks;
@@ -29,4 +32,5 @@ class User{
         int userID;
         std::string name;
         std::vector<Book> borrowedBooks;
+        std::vector<DVD> borrowedDVDs;
 };

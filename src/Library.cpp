@@ -26,6 +26,7 @@ void Library::returnBorrowedBook(Book oldBook){
 
     for(size_t i = 0; i < books.size(); i++){
         if(oldBook == books[i]){
+            std::cout << "Old book: " << books[i].getTitle() << std::endl;
             books[i].setAvailable(1);
         }
     }
@@ -51,14 +52,25 @@ void Library::searchBook(std::string searchTitle){
 void Library::writeInventory(){
     std::ofstream file("Sample Data Files/inventory.txt");
 
+    char quote = '"';
+
     for(size_t i = 0; i < books.size(); i++){
         file << books[i].getISBN() << " ";
-        file << books[i].getTitle() << " ";
-        file << books[i].getAuthor() << " ";
-        file << books[i].getAvailable() << "\n";
+        file << quote << books[i].getTitle() << quote << " ";
+        file << quote << books[i].getAuthor() << quote << " ";
+        file << books[i].getAvailable();
+        if(i != books.size()-1) file << "\n";
     }
 
     file.close();
+}
+
+void Library::syncUserChanges(){
+    for(size_t i = 0; i < users.size(); i++){
+        if(users[i].getUserID() == currentUser.getUserID()){
+            users[i].setBorrowedBooks(currentUser.getBorrowedBooks());
+        }
+    }
 }
 
 void Library::readInventory(){
@@ -94,7 +106,7 @@ void Library::writeUsers(){
         for(size_t j = 0; j < users[i].getBorrowedBooks().size();j++){
             file << " " << users[i].getBorrowedBooks()[j].getISBN();
         }
-        file << "\n";
+        if(i != users.size()-1)file << "\n";
     }
 }
 
