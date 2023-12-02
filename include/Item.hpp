@@ -2,10 +2,16 @@
 
 #include <iostream>
 
+enum inventory{
+    BOOK,
+    DVDs
+};
+
 class Item{
     public:
         Item();
         Item(std::string title, bool available);
+
         std::string getTitle();
         bool getAvailable();
 

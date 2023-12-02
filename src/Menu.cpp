@@ -5,16 +5,16 @@ User currentUser;
 
 void displayInitialMenu(){
     std::cout << "Library!" << std::endl;
-    std::cout << "1. Add/remove book to/from library" << std::endl;
+    std::cout << "1. Add/remove Item to/from library" << std::endl;
     std::cout << "2. Select Current User" << std::endl;
-    std::cout << "3. Borrow/Return Books" << std::endl;
-    std::cout << "4. Display available Books" << std::endl;
-    std::cout << "5. Search for Book" << std::endl;
+    std::cout << "3. Borrow/Return Items" << std::endl;
+    std::cout << "4. Display Library" << std::endl;
+    std::cout << "5. Search Through Library" << std::endl;
     //std::cout << "6. Save current Library Books and Users to file" << std::endl;
     std::cout << "0. Save and Exit" << std::endl;
 }
 
-void addRemoveBookMenu(){
+void addRemoveItemMenu(){
     //bool valid = 1;
     int input;
     std::cout << "1. Add Book to library" << std::endl;
@@ -85,7 +85,7 @@ void setCurrentUser(){
     }
 }
 
-void searchBookByTitle(){
+void searchItemByTitle(){
     std::string title;
 
     std::cout << "Enter title to search for" << std::endl;
@@ -94,65 +94,125 @@ void searchBookByTitle(){
     l.searchBook(title);
 }
 
-void borrowReturnBook(){
+void borrowReturnItem(){
     int input;
-    std::cout << "1. Borrow Book" << std::endl;
-    std::cout << "2. Return Book" << std::endl;
+    std::cout << "1. Borrow Item" << std::endl;
+    std::cout << "2. Return Item" << std::endl;
 
     std::cin >> input;
 
     switch(input){
         case 1:{
-            borrowBook();
+            borrowItem();
             break;
         }
         case 2:{
-            returnBook();
+            returnItem();
             break;
         }
     }
     l.syncUserChanges();
 }
 
-void borrowBook(){
-    int choice;
-    std::cout << "\nAvailable Books" << std::endl;
-    l.displayAvailableBooks();
-    std::cout << "0. Return to menu" << std::endl;
-    std::cin >> choice;
+void borrowItem(){
+    int itemChoice;
+    std::cout << "Item to Borrow: " << std::endl;
+    std::cout << "1. Book" << std::endl;
+    std::cout << "2. DVD" << std::endl;
 
-    if(choice == 0){
-        std::cout << "\e[1;1H\e[2J" << std::endl;
-        processInitialMenu();
-    }
-    else{
-        Book bookToBorrow = l.findBookByISBN(l.getBooks()[choice-1].getISBN()).second;
-        l.borrowBook(bookToBorrow);
-    }
+    std::cin >> itemChoice;
 
-    std::cout << "\e[1;1H\e[2J" << std::endl;
-    std::cout << "Book Borrowed!\n" << std::endl;
+    switch(itemChoice){
+        case 1:{
+            int choice;
+            std::cout << "\nAvailable Books" << std::endl;
+            l.displayAvailableBooks();
+            std::cout << "0. Return to menu" << std::endl;
+            std::cin >> choice;
+
+            if(choice == 0){
+                std::cout << "\e[1;1H\e[2J" << std::endl;
+                processInitialMenu();
+            }
+            else{
+                Book bookToBorrow = l.findBookByISBN(l.getBooks()[choice-1].getISBN()).second;
+                l.borrowBook(bookToBorrow);
+            }
+
+            std::cout << "\e[1;1H\e[2J" << std::endl;
+            std::cout << "Book Borrowed!\n" << std::endl;
+        }
+        case 2:{
+            int choice;
+            std::cout << "\nAvailable DVDs" << std::endl;
+            l.displayAvailableDVDs();
+            std::cout << "0. Return to menu" << std::endl;
+            std::cin >> choice;
+
+            if(choice == 0){
+                std::cout << "\e[1;1H\e[2J" << std::endl;
+                processInitialMenu();
+            }
+            else{
+                DVD dvdToBorrow = l.findDVDByID(l.getDVDs()[choice-1].getID()).second;
+                l.borrowDVD(dvdToBorrow);
+            }
+            std::cout << "\e[1;1H\e[2J" << std::endl;
+            std::cout << "DVD Borrowed!\n" << std::endl;
+        }
+    }
+    
 }
 
-void returnBook(){
-    int choice;
-    std::string isbnToReturn;
-    std::cout << "Currently borrowed books: " << std::endl;
-    displayBorrowedBooks();
-    std::cout << "0. Return to menu" << std::endl;
-    std::cin >> choice;
+void returnItem(){
+    int itemChoice;
+    std::cout << "Item to Return: " << std::endl;
+    std::cout << "1. Book" << std::endl;
+    std::cout << "2. DVD" << std::endl;
 
-    if(choice == 0){
-        std::cout << "\e[1;1H\e[2J" << std::endl;
-        processInitialMenu();
-    }else{
-        Book bookToReturn = l.findBookByISBN(currentUser.getBorrowedBooks()[choice-1].getISBN()).second;
-        std::cout << "Book to return: " << bookToReturn.getTitle() << std::endl;
-        l.returnBorrowedBook(bookToReturn);
+    std::cin >> itemChoice;
+    switch(itemChoice){
+        case 1:{
+            int choice;
+            std::string isbnToReturn;
+            std::cout << "Currently borrowed books: " << std::endl;
+            displayBorrowedBooks();
+            std::cout << "0. Return to menu" << std::endl;
+            std::cin >> choice;
+
+            if(choice == 0){
+                std::cout << "\e[1;1H\e[2J" << std::endl;
+                processInitialMenu();
+            }else{
+                Book bookToReturn = l.findBookByISBN(currentUser.getBorrowedBooks()[choice-1].getISBN()).second;
+                std::cout << "Book to return: " << bookToReturn.getTitle() << std::endl;
+                l.returnBorrowedBook(bookToReturn);
+            }
+
+            //std::cout << "\e[1;1H\e[2J" << std::endl;
+            std::cout << "Book Returned!\n" << std::endl;
+        }
+        case 2:{
+            int choice;
+            int dvdIDToReturn;
+            std::cout << "Currently borrowed DVDs: " << std::endl;
+            displayBorrowedDVDs();
+            std::cout << "0. Return to menu" << std::endl;
+            std::cin >> choice;
+
+            if(choice == 0){
+                std::cout << "\e[1;1H\e[2J" << std::endl;
+                processInitialMenu();
+            }else{
+                DVD dvdToReturn = l.findDVDByID(currentUser.getBorrowedDVDs()[choice-1].getID()).second;
+                std::cout << "DVD to return: " << dvdToReturn.getTitle() << std::endl;
+                l.returnBorrowedDVD(dvdToReturn);
+            }
+
+            //std::cout << "\e[1;1H\e[2J" << std::endl;
+            std::cout << "DVD Returned!\n" << std::endl;
+        }
     }
-
-    //std::cout << "\e[1;1H\e[2J" << std::endl;
-    std::cout << "Book Returned!\n" << std::endl;
 }
 
 void displayBorrowedBooks(){
@@ -161,6 +221,16 @@ void displayBorrowedBooks(){
     }else{
         for(size_t i = 0; i < currentUser.getBorrowedBooks().size(); i++){
             std::cout << i+1 << ". " << currentUser.getBorrowedBooks()[i].getTitle() << std::endl;
+        }
+    }
+}
+
+void displayBorrowedDVDs(){
+    if(currentUser.getBorrowedDVDs().size() == 0){
+        std::cout << "You have no borrowed DVDs" << std::endl;
+    }else{
+        for(size_t i = 0; i < currentUser.getBorrowedDVDs().size(); i++){
+            std::cout << i+1 << ". " << currentUser.getBorrowedDVDs()[i].getTitle() << std::endl;
         }
     }
 }
@@ -181,7 +251,7 @@ void processInitialMenu(){
             }
             case 1:{
                 std::cout << "\n";
-                addRemoveBookMenu();
+                addRemoveItemMenu();
                 break;
             }
             case 2:{
@@ -194,7 +264,7 @@ void processInitialMenu(){
                     std::cout << "No user selected, please select one first" << std::endl;
                     break;
                 }
-                borrowReturnBook();
+                borrowReturnItem();
                 break;
             }
             case 4:{
@@ -204,7 +274,7 @@ void processInitialMenu(){
             }
             case 5:{
                 std::cout << "\n";
-                searchBookByTitle();
+                searchItemByTitle();
                 break;
             }
         }

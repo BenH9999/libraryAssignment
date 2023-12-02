@@ -12,7 +12,9 @@ class User{
         User();
         //~User();
         void addNewBorrowedBook(Book newBook);
+        void addNewBorrowedDVD(DVD newDVD);
         void returnBook(std::vector<Book>::iterator pos);
+        void returnDVD(std::vector<DVD>::iterator pos);
         bool isEmpty();
 
         int getUserID();
@@ -26,7 +28,7 @@ class User{
         void setBorrowedDVDs(std::vector<DVD> addNewBorrowedDVDs);
 
         bool operator==(const User& other) const {
-            return userID == other.userID && name == other.name && borrowedBooks == other.borrowedBooks;
+            return userID == other.userID && name == other.name && borrowedBooks == other.borrowedBooks && borrowedDVDs == other.borrowedDVDs;
         }
     private:
         int userID;

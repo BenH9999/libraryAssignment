@@ -14,6 +14,10 @@ class DVD: public Item{
         void setID(int newID);
         void setGenre(std::string newGenre);
         void setRating(double newRating);
+
+        bool operator==(const DVD& other) const {
+            return static_cast<const Item&>(*this) == static_cast<const Item&>(other) && id == other.id && genre == other.genre && rating == other.rating; 
+        }
     private:
         int id;
         std::string genre;

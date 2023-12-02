@@ -4,12 +4,13 @@
 
 void displayInitialMenu();
 void processInitialMenu();
-void addRemoveBookMenu();
+void addRemoveItemMenu();
 void setCurrentUser();
-void searchBookByTitle();
-void borrowReturnBook();
-void borrowBook();
-void returnBook();
+void searchItemByTitle();
+void borrowReturnItem();
+void borrowItem();
+void returnItem();
 void displayBorrowedBooks();
+void displayBorrowedDVDs();
 
 extern User currentUser;

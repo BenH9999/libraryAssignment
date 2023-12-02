@@ -9,8 +9,16 @@ void User::returnBook(std::vector<Book>::iterator pos){
     this->borrowedBooks.erase(pos);
 }
 
+void User::returnDVD(std::vector<DVD>::iterator pos){
+    this->borrowedDVDs.erase(pos);
+}
+
 void User::addNewBorrowedBook(Book newBook){
     this->borrowedBooks.push_back(newBook);
+}
+
+void User::addNewBorrowedDVD(DVD newDVD){
+    this->borrowedDVDs.push_back(newDVD);
 }
 
 bool User::isEmpty(){

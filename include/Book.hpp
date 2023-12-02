@@ -17,7 +17,7 @@ class Book: public Item{
 
         //overloading operator to be able to compare books for vector
         bool operator==(const Book& other) const {
-            return static_cast<const Item&>(*this) == static_cast<const Item&>(other) && ISBN == other.ISBN && /*title == other.title &&*/ author == other.author /*&& available == other.available*/;
+            return static_cast<const Item&>(*this) == static_cast<const Item&>(other) && ISBN == other.ISBN && author == other.author;
         }
     private:
         std::string ISBN;
