@@ -13,8 +13,8 @@ class User{
         //~User();
         void addNewBorrowedBook(Book newBook);
         void addNewBorrowedDVD(DVD newDVD);
-        void returnBook(std::vector<Book>::iterator pos);
-        void returnDVD(std::vector<DVD>::iterator pos);
+        void returnBook(int pos);
+        void returnDVD(int pos);
         bool isEmpty();
 
         int getUserID();

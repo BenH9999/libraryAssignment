@@ -289,11 +289,11 @@ void returnItem(){
                 processInitialMenu();
             }else{
                 Book bookToReturn = l.findBookByISBN(currentUser.getBorrowedBooks()[choice-1].getISBN()).second;
-                std::cout << "Book to return: " << bookToReturn.getTitle() << std::endl;
+                //std::cout << "Book to return: " << bookToReturn.getTitle() << std::endl;
                 l.returnBorrowedBook(bookToReturn);
             }
 
-            //std::cout << "\e[1;1H\e[2J" << std::endl;
+            std::cout << "\e[1;1H\e[2J" << std::endl;
 
             break;
         }
@@ -309,11 +309,11 @@ void returnItem(){
                 processInitialMenu();
             }else{
                 DVD dvdToReturn = l.findDVDByID(currentUser.getBorrowedDVDs()[choice-1].getID()).second;
-                std::cout << "DVD to return: " << dvdToReturn.getTitle() << std::endl;
+                //std::cout << "DVD to return: " << dvdToReturn.getTitle() << std::endl;
                 l.returnBorrowedDVD(dvdToReturn);
             }
 
-            //std::cout << "\e[1;1H\e[2J" << std::endl;
+            std::cout << "\e[1;1H\e[2J" << std::endl;
 
             break;
         }

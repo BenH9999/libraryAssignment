@@ -5,16 +5,19 @@ User::User(){
     name = "";
 }
 
-void User::returnBook(std::vector<Book>::iterator pos){
-    std::cout << "almost there!" << std::endl;
-    
-    this->borrowedBooks.erase(pos);
-
-    std::cerr << "there!" << std::endl;
+template <typename T>
+void remove(std::vector<T>& vec, size_t pos){
+    typename std::vector<T>::iterator it = vec.begin();
+    std::advance(it, pos);
+    vec.erase(it);
 }
 
-void User::returnDVD(std::vector<DVD>::iterator pos){
-    this->borrowedDVDs.erase(pos);
+void User::returnBook(int pos){
+    remove<Book>(borrowedBooks, pos);
+}
+
+void User::returnDVD(int pos){
+    remove<DVD>(borrowedDVDs, pos);
 }
 
 void User::addNewBorrowedBook(Book newBook){
