@@ -8,10 +8,13 @@ class Library{
         //~Library();
 
         void addNewBook(Book newBook);
+        void addNewDVD(DVD newDVD);
         void addNewUser(User newUser);
         void deleteBook(Book bookToDelete);
+        void deleteDVD(DVD dvdToDelete);
         void deleteUser(User userToDelete);
         void searchBook(std::string searchTitle);
+        void searchDVD(std::string searchTitle);
         void displayAvailableBooks();
         void displayAvailableDVDs();
         void displayAllUsers();
@@ -28,8 +31,8 @@ class Library{
         void returnBorrowedBook(Book oldBook);
         void returnBorrowedDVD(DVD oldDVD);
         void syncUserChanges();
-        size_t findBookIndex(int choice);
-        size_t findDVDIndex(int choice);
+        size_t findBookIndex(size_t choice);
+        size_t findDVDIndex(size_t choice);
 
         std::vector<Book> getBooks();
         std::vector<User> getUsers();

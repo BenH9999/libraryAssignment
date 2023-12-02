@@ -10,7 +10,7 @@ Item::Item(std::string title, bool available){
     this->available = available;
 }
 
-std::string Item::getTitle(){
+std::string Item::getTitle() const{
     return this->title;
 }
 

@@ -26,36 +26,57 @@ void Library::borrowDVD(DVD newDVD){
 }
 
 void Library::returnBorrowedBook(Book oldBook){
-    std::vector<Book>::iterator it = std::find(currentUser.getBorrowedBooks().begin(),currentUser.getBorrowedBooks().end(),oldBook);
+    std::vector<Book>::iterator it = std::find_if(currentUser.getBorrowedBooks().begin(),currentUser.getBorrowedBooks().end(),[oldBook](const Book& book){
+        return book == oldBook;
+    });
 
-    if(it != this->books.end()){
+    if(it != currentUser.getBorrowedBooks().end()){
         currentUser.returnBook(it);
+        //for(size_t i = 0; i < books.size(); i++){
+        //if(oldBook == books[i]){
+            //std::cout << "Old book: " << books[i].getTitle() << std::endl;
+            //books[i].setAvailable(1);
+        //}
+    //}
+        std::vector<Book>::iterator libraryIT = std::find(books.begin(),books.end(), oldBook);
+        if(libraryIT != books.end()){
+            libraryIT->setAvailable(1);
+            std::cout << "Book returned\n" << std::endl;
+        }else{
+            std::cerr << "Error: Book not found in library" << std::endl;
+        }
     }else{
-        std::cout << "Book not found" << std::endl;
+        std::cout << "Book not found in users borrowed books" << std::endl;
     }
 
-    for(size_t i = 0; i < books.size(); i++){
-        if(oldBook == books[i]){
-            std::cout << "Old book: " << books[i].getTitle() << std::endl;
-            books[i].setAvailable(1);
-        }
+    std::cout << "All borrowed Books AFTER: " << std::endl;
+    for(size_t i = 0; i < currentUser.getBorrowedBooks().size();i++){
+        std::cout << i+1 << ". " << currentUser.getBorrowedBooks()[i].getTitle() << std::endl;
     }
 }
 
 void Library::returnBorrowedDVD(DVD oldDVD){
     std::vector<DVD>::iterator it = std::find(currentUser.getBorrowedDVDs().begin(),currentUser.getBorrowedDVDs().end(),oldDVD);
 
-    if(it != this->dvds.end()){
+    if(it != currentUser.getBorrowedDVDs().end()){
+        std::cout << "error before!" << std::endl;
         currentUser.returnDVD(it);
-    }else{
-        std::cout << "DVD not found" << std::endl;
-    }
-
-    for(size_t i = 0; i < dvds.size(); i++){
-        if(oldDVD == dvds[i]){
-            std::cout << "Old DVD: " << dvds[i].getTitle() << std::endl;
-            dvds[i].setAvailable(1);
+        std::cout << "error after!" << std::endl;
+        //for(size_t i = 0; i < dvds.size(); i++){
+        //if(oldDVD == dvds[i]){
+            //std::cout << "Old DVD: " << dvds[i].getTitle() << std::endl;
+            //dvds[i].setAvailable(1);
+        //}
+        //}
+        std::vector<DVD>::iterator libraryIT = std::find(dvds.begin(),dvds.end(),oldDVD);
+        if(libraryIT != dvds.end()){
+            libraryIT->setAvailable(1);
+            std::cout << "DVD Returned!\n" << std::endl;
+        }else{
+            std::cerr << "Error: DVD not found in library" << std::endl;
         }
+    }else{
+        std::cout << "DVD not found in users borrowed DVDs" << std::endl;
     }
 }
 
@@ -67,6 +88,23 @@ void Library::searchBook(std::string searchTitle){
         resultFound = books[i].getTitle().find(searchTitle) != std::string::npos;
         if(resultFound){
             searchResults.push_back(books[i]);
+        }
+        resultFound = 0;
+    }
+
+    for(size_t i = 0; i < searchResults.size(); i++){
+        std::cout << searchResults[i].getTitle() << std::endl;
+    }
+}
+
+void Library::searchDVD(std::string searchTitle){
+    bool resultFound = 0;
+    std::vector<DVD> searchResults;
+
+    for(size_t i = 0; i < dvds.size(); i++){
+        resultFound = dvds[i].getTitle().find(searchTitle) != std::string::npos;
+        if(resultFound){
+            searchResults.push_back(dvds[i]);
         }
         resultFound = 0;
     }
@@ -139,6 +177,7 @@ void Library::readInventory(){
                 iss >> available;
 
                 this->books.emplace_back(Book(isbn,title,author,available));
+                break;
             }
             case DVDs:{
                 int id;
@@ -152,6 +191,7 @@ void Library::readInventory(){
                 iss >> available;
 
                 this->dvds.emplace_back(DVD(title,id,genre,rating,available));
+                break;
             }
         }
     }
@@ -196,17 +236,21 @@ void Library::readUsers(){
         std::string isbnOrDVDID;
         while(iss >> isbnOrDVDID){
             if(isbnOrDVDID.find('-') != std::string::npos){
-                Book borrowedBook = findBookByISBN(isbnOrDVDID).second;
+                std::pair<bool,Book> borrowedBook = findBookByISBN(isbnOrDVDID);
 
-                if(borrowedBook.getISBN() == isbnOrDVDID){
-                    user.addNewBorrowedBook(borrowedBook);
+                if(borrowedBook.first){
+                    user.addNewBorrowedBook(borrowedBook.second);
+                }else {
+                    std::cerr << "Error: Book with ISBN " << isbnOrDVDID << " not found." << std::endl;
                 }
             }else{
                 int dvdID = std::stoi(isbnOrDVDID);
-                DVD borrowedDVD = findDVDByID(dvdID).second;
+                std::pair<bool,DVD> borrowedDVD = findDVDByID(dvdID);
 
-                if(borrowedDVD.getID() == dvdID){
-                    user.addNewBorrowedDVD(borrowedDVD);
+                if(borrowedDVD.first){
+                    user.addNewBorrowedDVD(borrowedDVD.second);
+                }else {
+                    std::cerr << "Error: DVD with ID " << dvdID << " not found." << std::endl;
                 }
             }
         }
@@ -262,7 +306,7 @@ std::string Library::readQuotedString(std::istringstream& iss){
     return token;
 }
 
-size_t Library::findBookIndex(int choice){
+size_t Library::findBookIndex(size_t choice){
     size_t index;
     size_t counter =0;
     for(index = 0; index < books.size(); index++){
@@ -272,7 +316,7 @@ size_t Library::findBookIndex(int choice){
     return 0;
 }
 
-size_t Library::findDVDIndex(int choice){
+size_t Library::findDVDIndex(size_t choice){
     size_t index;
     size_t counter =0;
     for(index = 0; index < dvds.size(); index++){
@@ -322,6 +366,10 @@ void Library::addNewUser(User newUser){
     this->users.push_back(newUser);
 }
 
+void Library::addNewDVD(DVD newDVD){
+    this->dvds.push_back(newDVD);
+}
+
 void Library::deleteBook(Book bookToDelete){
     std::vector<Book>::iterator it = std::find(this->books.begin(),this->books.end(),bookToDelete);
     
@@ -329,6 +377,16 @@ void Library::deleteBook(Book bookToDelete){
         this->books.erase(it);
     }else{
         std::cout << "Book not found" << std::endl;
+    }
+}
+
+void Library::deleteDVD(DVD dvdToDelete){
+    std::vector<DVD>::iterator it = std::find(this->dvds.begin(),this->dvds.end(),dvdToDelete);
+
+    if(it != this->dvds.end()){
+        this->dvds.erase(it);
+    }else{
+        std::cout << "DVD not found" << std::endl;
     }
 }
 
@@ -350,10 +408,18 @@ std::vector<User> Library::getUsers(){
     return this->users;
 }
 
+std::vector<DVD> Library::getDVDs(){
+    return this->dvds;
+}
+
 void Library::setBooks(std::vector<Book> newBooks){
     this->books = newBooks;
 }
 
 void Library::setUsers(std::vector<User> newUsers){
     this->users = newUsers;
+}
+
+void Library::setDVDs(std::vector<DVD> newDVDs){
+    this->dvds = newDVDs;
 }

@@ -6,7 +6,11 @@ User::User(){
 }
 
 void User::returnBook(std::vector<Book>::iterator pos){
+    std::cout << "almost there!" << std::endl;
+    
     this->borrowedBooks.erase(pos);
+
+    std::cerr << "there!" << std::endl;
 }
 
 void User::returnDVD(std::vector<DVD>::iterator pos){

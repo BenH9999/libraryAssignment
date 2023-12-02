@@ -12,7 +12,7 @@ class Item{
         Item();
         Item(std::string title, bool available);
 
-        std::string getTitle();
+        std::string getTitle() const;
         bool getAvailable();
 
         void setTitle(std::string newTitle);
