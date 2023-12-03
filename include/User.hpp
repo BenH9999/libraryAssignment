@@ -17,12 +17,12 @@ class User{
         void returnDVD(int pos);
         bool isEmpty();
 
-        int getUserID();
+        int getID();
         std::string getName();
         std::vector<Book> getBorrowedBooks();
         std::vector<DVD> getBorrowedDVDs();
 
-        void setUserID(int newUserID);
+        void setID(int newUserID);
         void setName(std::string newName);
         void setBorrowedBooks(std::vector<Book> newBorrowedBooks);
         void setBorrowedDVDs(std::vector<DVD> addNewBorrowedDVDs);

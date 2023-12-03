@@ -7,32 +7,22 @@ class Library{
         Library();
         //~Library();
 
-        void addNewBook(Book newBook);
-        void addNewDVD(DVD newDVD);
-        void addNewUser(User newUser);
-        void deleteBook(Book bookToDelete);
-        void deleteDVD(DVD dvdToDelete);
-        void deleteUser(User userToDelete);
-        void searchBook(std::string searchTitle);
-        void searchDVD(std::string searchTitle);
-        void displayAvailableBooks();
-        void displayAvailableDVDs();
+        template <typename T> void addNewItem(T newItem);
+        template <typename T> void deleteItem(T itemToDelete);
+        template <typename T> void searchItem(std::string searchTitle);
+        template <typename T> void displayAvailableItems();
         void displayAllUsers();
         void readInventory();
         void writeInventory();
         void readUsers();
         void writeUsers();
         std::string readQuotedString(std::istringstream& iss);
-        std::pair<bool,Book> findBookByISBN(std::string isbn);
-        std::pair<bool,User> findUserByUserID(int userID);
-        std::pair<bool,DVD> findDVDByID(int dvdID);
-        void borrowBook(Book newBook);
-        void borrowDVD(DVD newDVD);
+        template <typename T, typename ID> std::pair<bool,T> findItemByID(ID id);
+        template <typename T> void borrowItem(T newItem);
         void returnBorrowedBook(Book oldBook);
         void returnBorrowedDVD(DVD oldDVD);
         void syncUserChanges();
-        size_t findBookIndex(size_t choice);
-        size_t findDVDIndex(size_t choice);
+        template <typename T> size_t findItemIndex(size_t choice);
 
         std::vector<Book> getBooks();
         std::vector<User> getUsers();
@@ -45,6 +35,9 @@ class Library{
         std::vector<Book> books;
         std::vector<User> users;
         std::vector<DVD> dvds;
+
+        template <typename T>
+        std::pair<std::vector<T>*, int> getItemContainer();
 };
 
 extern User currentUser;

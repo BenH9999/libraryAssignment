@@ -32,7 +32,7 @@ bool User::isEmpty(){
     return this->userID==0 && this->name == "" && this->borrowedBooks.empty();
 }
 
-int User::getUserID(){
+int User::getID(){
     return this->userID;
 }
 
@@ -48,7 +48,7 @@ std::vector<DVD> User::getBorrowedDVDs(){
     return this->borrowedDVDs;
 }
 
-void User::setUserID(int newUserID){
+void User::setID(int newUserID){
     this->userID = newUserID;
 }
 

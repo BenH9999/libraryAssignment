@@ -2,9 +2,10 @@
 
 #include <iostream>
 
-enum inventory{
+enum InventoryType{
     BOOK,
-    DVDs
+    DVDs,
+    USER
 };
 
 class Item{
