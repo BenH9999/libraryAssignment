@@ -1,24 +1,43 @@
+/* 
+    Name: Ben Houghton
+    Matric Number: 2498662
+    Module Code: AC21008
+*/
+
 #include "Library.hpp"
 
+/*
+constructor
+*/
 Library::Library(){
     readInventory();
     readUsers();
 }
 
+/*
+template function to borrow item, it gets the items as a vector pointer
+then adds it to the current users borrowed items and sets the item in the library
+to unavailable
+*/
 template <typename T> void Library::borrowItem(T newItem){
-    std::pair<std::vector<T>*, int> items = getItemContainer<T>();
+    std::vector<T>* items = getItemContainer<T>();
 
     currentUser.addNewBorrowedItem<T>(newItem);
 
-    for(size_t i = 0; i < items.first->size();i++){
-        if(newItem == items.first->at(i)){
-            items.first->at(i).setAvailable(0);
+    for(size_t i = 0; i < items->size();i++){
+        if(newItem == items->at(i)){
+            items->at(i).setAvailable(0);
         }
     }
 }
 
+/*
+template function to return a borrowed item, it gets the items as a vector pointer
+then removes the item from the users borrowed items then it sets it to available
+again in the library items vector
+*/
 template <typename T> void Library::returnBorrowedItem(T oldItem){
-    std::pair<std::vector<T>*, int> items = getItemContainer<T>();
+    std::vector<T>* items = getItemContainer<T>();
 
     for(size_t i = 0; i < currentUser.getBorrowedItems<T>().size(); i++){
         if(currentUser.getBorrowedItems<T>()[i] == oldItem){
@@ -26,8 +45,8 @@ template <typename T> void Library::returnBorrowedItem(T oldItem){
         }
     }
 
-    typename std::vector<T>::iterator libraryIT = std::find(items.first->begin(),items.first->end(),oldItem);
-    if(libraryIT != items.first->end()){
+    typename std::vector<T>::iterator libraryIT = std::find(items->begin(),items->end(),oldItem);
+    if(libraryIT != items->end()){
         libraryIT->setAvailable(1);
         std::cout << "Item returned\n" << std::endl;
     }else{
@@ -35,9 +54,14 @@ template <typename T> void Library::returnBorrowedItem(T oldItem){
     }
 }
 
+/*
+template function to search for item, it takes the search title from the menu
+and makes a vector of all the items where item.getTitle() contains
+the search title in any way
+*/
 template <typename T> void Library::searchItem(std::string searchTitle) {
     bool resultFound = false;
-    std::vector<T>* itemsForSearch = getItemContainer<T>().first;
+    std::vector<T>* itemsForSearch = getItemContainer<T>();
     std::vector<T> searchResults;
 
     for (size_t i = 0; i < itemsForSearch->size(); i++) {
@@ -53,6 +77,11 @@ template <typename T> void Library::searchItem(std::string searchTitle) {
     }
 }
 
+/*
+writes inventory to file, when writing the lines it prints a 1 or a 0
+at the start based off of what it is, then all of the data sequentially
+after separated by spaces
+*/
 void Library::writeInventory(){
     std::ofstream file("Sample Data Files/inventory.txt");
 
@@ -79,6 +108,10 @@ void Library::writeInventory(){
     file.close();
 }
 
+/*
+syncs user changes, runs after borrowing or returning
+a book
+*/
 void Library::syncUserChanges(){
     for(size_t i = 0; i < users.size(); i++){
         if(users[i].getID() == currentUser.getID()){
@@ -89,6 +122,11 @@ void Library::syncUserChanges(){
     }
 }
 
+/*
+function to read the inventory, it decides whether or not it is a book
+or a dvd based on the first character in the line then reads all data
+sequentially accordingly
+*/
 void Library::readInventory(){
     std::string fileNameBooks = "Sample Data Files/inventory.txt";
     std::ifstream fileBooks(fileNameBooks);
@@ -137,6 +175,10 @@ void Library::readInventory(){
     fileBooks.close();
 }
 
+/*
+writing the users to file, literally just writes
+sequentially, nothing important to note
+*/
 void Library::writeUsers(){
     std::ofstream file("Sample Data Files/users.txt");
 
@@ -153,6 +195,12 @@ void Library::writeUsers(){
     }
 }
 
+/*
+function to read the users, after reading in id and name it decides that
+it is reading in a book or a dvd based on whether the id contains a
+'-' as the dvdID is just an int after that it just reads them into a their vectors
+until there are no more lines to read
+*/
 void Library::readUsers(){
     std::string fileNameUsers = "Sample Data Files/users.txt";
     std::ifstream fileUsers(fileNameUsers);
@@ -198,10 +246,16 @@ void Library::readUsers(){
     fileUsers.close();
 }
 
+/*
+template function to find an item by id(also works for users)
+it takes the id iterates through the items vector and finds the position of the id
+returns true or false on whether or not it exists and returns the iterator pointer
+i.e. where the item is located
+*/
 template <typename T, typename ID> std::pair<bool, T> Library::findItemByID(ID id){
-    std::pair<std::vector<T>*, int> items = getItemContainer<T>();
+    std::vector<T>* items = getItemContainer<T>();
 
-    typename std::vector<T>::iterator it = std::find_if(items.first->begin(),items.first->end(), [id](T& item)->bool{
+    typename std::vector<T>::iterator it = std::find_if(items->begin(),items->end(), [id](T& item)->bool{
         if constexpr (std::is_same_v<T,Book>){
             return id == item.getISBN();
         }else{
@@ -209,13 +263,16 @@ template <typename T, typename ID> std::pair<bool, T> Library::findItemByID(ID i
         }
     });
 
-    if(it != items.first->end()){
+    if(it != items->end()){
         return std::make_pair(true, *it);
     }else{
         return std::make_pair(false, T());
-    }
+    }return std::make_pair(false, T());
 }
 
+/*
+reading quoted string, only used when reading the inventory file
+*/
 std::string Library::readQuotedString(std::istringstream& iss){
     std::string token;
     char quote;
@@ -227,10 +284,15 @@ std::string Library::readQuotedString(std::istringstream& iss){
     return token;
 }
 
+/*
+template function to find an item's index, used when borrowing a book
+due to my decision to print the available items with index+1 for the user to
+be able to just input that
+*/
 template <typename T> size_t Library::findItemIndex(size_t choice){
     size_t index;
     size_t counter = 0;
-    std::vector<T>* items = getItemContainer<T>().first;
+    std::vector<T>* items = getItemContainer<T>();
     for(index = 0; index < items->size();index++){
         if(items->at(index).getAvailable())counter++;
         if(counter==choice)return index;
@@ -238,9 +300,13 @@ template <typename T> size_t Library::findItemIndex(size_t choice){
     return 0;
 }
 
+/*
+template function to display available items, just prints each available item with
+counter+1 at the start
+*/
 template <typename T> void Library::displayAvailableItems(){
     size_t counter = 0;
-    std::vector<T>* items = getItemContainer<T>().first;
+    std::vector<T>* items = getItemContainer<T>();
     for(size_t i = 0; i < items->size(); i++){
         if(items->at(i).getAvailable()){
             std::cout << counter+1 << ". " << items->at(i).getTitle() << std::endl;
@@ -249,6 +315,10 @@ template <typename T> void Library::displayAvailableItems(){
     }
 }
 
+/*
+display all users function, i believe this was just for testing and isnt actually used anywhere
+but it works
+*/
 void Library::displayAllUsers(){
     for(size_t i = 0; i < this->users.size(); i++){
         std::cout << this->users[i].getID() << std::endl;
@@ -261,41 +331,58 @@ void Library::displayAllUsers(){
     }
 }
 
+/*
+template function to add a new item to either books or dvds
+*/
 template <typename T>
 void Library::addNewItem(T newItem){
-    std::pair<std::vector<T>*, int> items = getItemContainer<T>();
-    items.first->push_back(newItem);
+    std::vector<T>* items = getItemContainer<T>();
+    items->push_back(newItem);
 }
 
+/*
+template function to remove an item from books or dvds, opposite of add
+but has to iterate through the items to find the position first
+*/
 template <typename T> void Library::deleteItem(T itemToDelete){
-    std::pair<std::vector<T>*, int> items = getItemContainer<T>();
+    std::vector<T>* items = getItemContainer<T>();
 
-    typename std::vector<T>::iterator it = std::find(items.first->begin(),items.first->end(),itemToDelete);
+    typename std::vector<T>::iterator it = std::find(items->begin(),items->end(),itemToDelete);
 
-    if(it != items.first->end()){
-        items.first->erase(it);
+    if(it != items->end()){
+        items->erase(it);
     }else{
         std::cout << "Item not found" << std::endl;
     }
 }
 
+/*
+template function to get items
+*/
 template <typename T> std::vector<T> Library::getItems(){
-    std::vector<T>* items = getItemContainer<T>().first;
+    std::vector<T>* items = getItemContainer<T>();
     return (*items);
 }
 
+/*
+template function to set items, i dont think this is ever used
+but i made it just in case
+*/
 template <typename T> void Library::setItems(std::vector<T> newItems){
-    std::vector<T>* items = getItemContainer<T>().first;
+    std::vector<T>* items = getItemContainer<T>();
     (*items) = newItems;
 }
 
-template <typename T> std::pair<std::vector<T>*, int> Library::getItemContainer(){
+/*
+template helper function to get the vector needed depended on the scenario
+*/
+template <typename T> std::vector<T>* Library::getItemContainer(){
     if constexpr(std::is_same_v<T,Book>){
-        return std::make_pair(&books, BOOK);
+        return &books;
     }else if constexpr(std::is_same_v<T, DVD>){
-        return std::make_pair(&dvds,DVDs);
+        return &dvds;
     }else if constexpr(std::is_same_v<T, User>){
-        return std::make_pair(&users,USER);
+        return &users;
     }else{
     }
 }

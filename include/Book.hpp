@@ -1,3 +1,9 @@
+/* 
+    Name: Ben Houghton
+    Matric Number: 2498662
+    Module Code: AC21008
+*/
+
 #pragma once
 
 #include "Item.hpp"
@@ -7,7 +13,6 @@ class Book: public Item{
     public:
         Book();
         Book(std::string isbn, std::string title,std::string author,bool available);
-        //~Book();
 
         std::string getAuthor();
         std::string getISBN();

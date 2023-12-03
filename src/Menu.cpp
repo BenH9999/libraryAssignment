@@ -1,8 +1,19 @@
+/* 
+    Name: Ben Houghton
+    Matric Number: 2498662
+    Module Code: AC21008
+*/
+
 #include "Menu.hpp"
 
 Library l;
 User currentUser;
 
+/* 
+    Function to just print all menu options, in function for
+    the sake of being clean(lots of functions in this file are
+    split apart for the sake of being more organised)
+ */
 void displayInitialMenu(){
     std::cout << "Library!" << std::endl;
     std::cout << "1. Add/remove Item to/from library" << std::endl;
@@ -10,10 +21,13 @@ void displayInitialMenu(){
     std::cout << "3. Borrow/Return Items" << std::endl;
     std::cout << "4. Display Library" << std::endl;
     std::cout << "5. Search Through Library" << std::endl;
-    //std::cout << "6. Save current Library Books and Users to file" << std::endl;
+    std::cout << "6. Save current Library Books and Users to file" << std::endl;
     std::cout << "0. Save and Exit" << std::endl;
 }
 
+/* 
+function to process whether to add or remove an item
+ */
 void addRemoveItemMenu(){
     int input;
     std::cout << "1. Add Item to library" << std::endl;
@@ -21,7 +35,13 @@ void addRemoveItemMenu(){
 
     std::cin >> input;
 
+    std::cout << "\e[1;1H\e[2J";
+    /* 
+    the nested switch statements are to decide what
+    item to add/remove
+     */
     switch(input){
+        //Adding an item
         case 1:{
             int itemChoice;
             std::cout << "Item to add" << std::endl;
@@ -29,13 +49,17 @@ void addRemoveItemMenu(){
             std::cout << "2. DVD" << std::endl;
             std::cin >> itemChoice;
 
+            std::cout << "\e[1;1H\e[2J";
+
             switch(itemChoice){
+                //book
                 case 1:{
                     std::string title, author, isbn;
 
                     std::cout << "Enter isbn of book" << std::endl;
                     std::cin >> isbn;
 
+                    //check if it already exists
                     for(size_t i = 0; i < l.getItems<Book>().size(); i++){
                         if(l.getItems<Book>()[i].getISBN() == isbn){
                             std::cout << "Book already exists" << std::endl;
@@ -52,12 +76,13 @@ void addRemoveItemMenu(){
                     Book newBook(isbn,title,author,1);
                     l.addNewItem<Book>(newBook);
 
-                    std::cout << "\e[1;1H\e[2J" << std::endl;
+                    std::cout << "\e[1;1H\e[2J";
                     std::cout << "Added book" << std::endl;
 
                     break;
                 }
                 case 2:{
+                    //dvd
                     std::string title,genre;
                     int id;
                     double rating;
@@ -66,6 +91,7 @@ void addRemoveItemMenu(){
 
                     std::cin >> id;
 
+                    //check if it already exists
                     if(l.findItemByID<DVD>(id).first){
                         std::cout << "DVD already exists" << std::endl;
                         return;
@@ -92,13 +118,17 @@ void addRemoveItemMenu(){
             break;
         }
         case 2:{
+            //removing an item
             int itemChoice;
             std::cout << "Item to remove" << std::endl;
             std::cout << "1. Book" << std::endl;
             std::cout << "2. DVD" << std::endl;
             std::cin >> itemChoice;
 
+            std::cout << "\e[1;1H\e[2J";
+
             switch(itemChoice){
+                //book
                 case 1:{
                     std::string isbn;
                     Book bookToRemove;
@@ -106,6 +136,7 @@ void addRemoveItemMenu(){
                     std::cout << "Enter isbn of book to be removed" << std::endl;
                     std::cin >> isbn;
 
+                    //check if it exists
                     if(!l.findItemByID<Book>(isbn).first){
                         std::cout << "Book not found" << std::endl;
                         return;
@@ -115,18 +146,20 @@ void addRemoveItemMenu(){
 
                     l.deleteItem<Book>(bookToRemove);
 
-                    std::cout << "\e[1;1H\e[2J" << std::endl;
+                    std::cout << "\e[1;1H\e[2J";
                     std::cout << "Removed book" << std::endl;
 
                     break;
                 }
                 case 2:{
+                    //dvd
                     int dvdID;
                     DVD dvdToRemove;
 
                     std::cout << "Enter id of DVD to be removed" << std::endl;
                     std::cin >> dvdID;
 
+                    //check if it exists
                     if(!l.findItemByID<DVD>(dvdID).first){
                         std::cout << "DVD not found" << std::endl;
                         return;
@@ -135,7 +168,7 @@ void addRemoveItemMenu(){
                     dvdToRemove = l.findItemByID<DVD>(dvdID).second;
                     l.deleteItem<DVD>(dvdToRemove);
 
-                    std::cout << "\e[1;1H\e[2J" << std::endl;
+                    std::cout << "\e[1;1H\e[2J";
                     std::cout << "Removed DVD" << std::endl;
 
                     break;
@@ -146,6 +179,11 @@ void addRemoveItemMenu(){
     }
 }
 
+/* 
+set current user so that i dont need
+to remember the position of the current
+user in the users vector
+ */
 void setCurrentUser(){
     int userID;
     std::pair<bool,User> result;
@@ -155,13 +193,19 @@ void setCurrentUser(){
 
     result = l.findItemByID<User>(userID);
 
+    //checks if user exists
     if(result.first){
         currentUser = result.second;
+        std::cout << "\e[1;1H\e[2J";
+        std::cout << "Hello, " << currentUser.getName() << std::endl;
     }else{
+        std::cout << "\e[1;1H\e[2J";
         std::cout << "User not found" << std::endl;
     }
 
-    std::cout << "Borrowed Books: " << std::endl;
+    //these for loops below were used for testing when i was having issues reading the user file
+
+    /* std::cout << "Borrowed Books: " << std::endl;
     for(size_t i = 0; i < currentUser.getBorrowedItems<Book>().size();i++){
         std::cout << i+1 << ". " << currentUser.getBorrowedItems<Book>()[i].getTitle() << std::endl;
     }
@@ -169,9 +213,17 @@ void setCurrentUser(){
     std::cout << "Borrowed DVDs: " << std::endl;
     for(size_t i = 0; i < currentUser.getBorrowedItems<DVD>().size();i++){
         std::cout << i+1 << ". " << currentUser.getBorrowedItems<DVD>()[i].getTitle() << std::endl;
-    }
+    } */
 }
 
+/*
+this function is to search for a user.
+i wanted to make it more in depth but i
+didnt have time, it takes the input string
+and searches for it in the books vector.getTitle()
+string and if it finds the set of characters
+in that order it adds it to a vector of search results
+ */
 void searchItemByTitle(){
     int itemChoice;
     std::cout << "Items to search" << std::endl;
@@ -180,10 +232,14 @@ void searchItemByTitle(){
 
     std::cin >> itemChoice;
 
+    std::cout << "\e[1;1H\e[2J";
+
     std::string title;
 
     std::cout << "Enter title to search for" << std::endl;
     std::cin >> title;
+
+    std::cout << "\e[1;1H\e[2J";
 
     switch(itemChoice){
         case 1:{
@@ -197,6 +253,9 @@ void searchItemByTitle(){
     }
 }
 
+/*
+borrow item menu to decide if borrow or return
+*/
 void borrowReturnItem(){
     int input;
     std::cout << "1. Borrow Item" << std::endl;
@@ -204,6 +263,7 @@ void borrowReturnItem(){
 
     std::cin >> input;
 
+    std::cout << "\e[1;1H\e[2J";
     switch(input){
         case 1:{
             borrowItem();
@@ -217,6 +277,11 @@ void borrowReturnItem(){
     l.syncUserChanges();
 }
 
+/*
+borrow item menu, asks if the user wants to borrow a book or a dvd
+then prints the available items with index+1 next to them and takes the users integer
+and finds the items real index in the vector, then gets the item by id and borrows it
+*/
 void borrowItem(){
     int itemChoice;
     std::cout << "Item to Borrow: " << std::endl;
@@ -225,8 +290,10 @@ void borrowItem(){
 
     std::cin >> itemChoice;
 
+    std::cout << "\e[1;1H\e[2J";
     switch(itemChoice){
         case 1:{
+            //book
             size_t choice;
             std::cout << "\nAvailable Books" << std::endl;
             l.displayAvailableItems<Book>();
@@ -234,7 +301,7 @@ void borrowItem(){
             std::cin >> choice;
 
             if(choice == 0){
-                std::cout << "\e[1;1H\e[2J" << std::endl;
+                std::cout << "\e[1;1H\e[2J";
                 processInitialMenu();
             }
             else{
@@ -244,11 +311,12 @@ void borrowItem(){
                 l.borrowItem<Book>(bookToBorrow);
             }
 
-            std::cout << "\e[1;1H\e[2J" << std::endl;
+            std::cout << "\e[1;1H\e[2J";
             std::cout << "Book Borrowed!\n" << std::endl;
             break;
         }
         case 2:{
+            //dvd
             size_t choice;
             std::cout << "\nAvailable DVDs" << std::endl;
             l.displayAvailableItems<DVD>();
@@ -256,7 +324,7 @@ void borrowItem(){
             std::cin >> choice;
 
             if(choice == 0){
-                std::cout << "\e[1;1H\e[2J" << std::endl;
+                std::cout << "\e[1;1H\e[2J";
                 processInitialMenu();
             }
             else{
@@ -264,7 +332,7 @@ void borrowItem(){
                 DVD dvdToBorrow = l.findItemByID<DVD>(l.getItems<DVD>()[index].getID()).second;
                 l.borrowItem<DVD>(dvdToBorrow);
             }
-            std::cout << "\e[1;1H\e[2J" << std::endl;
+            std::cout << "\e[1;1H\e[2J";
             std::cout << "DVD Borrowed!\n" << std::endl;
             break;
         }
@@ -272,6 +340,11 @@ void borrowItem(){
     
 }
 
+/*
+function to return item, like borrowing it asks the user if they want to return a book or a dvd
+however it is simpler as it doesnt need to find the 'real' index. It prints all the borrowed items
+with index+1 next to it and takes the users choice and finds the item based off of the id
+*/
 void returnItem(){
     int itemChoice;
     std::cout << "Item to Return: " << std::endl;
@@ -279,11 +352,14 @@ void returnItem(){
     std::cout << "2. DVD" << std::endl;
 
     std::cin >> itemChoice;
+
+    std::cout << "\e[1;1H\e[2J";
     switch(itemChoice){
         case 1:{
+            //book
             int choice;
             std::cout << "Currently borrowed books: " << std::endl;
-            displayBorrowedBooks();
+            displayBorrowedItems<Book>();
             std::cout << "0. Return to menu" << std::endl;
             std::cin >> choice;
 
@@ -292,23 +368,29 @@ void returnItem(){
                 processInitialMenu();
             }else{
                 Book bookToReturn = l.findItemByID<Book>(currentUser.getBorrowedItems<Book>()[choice-1].getISBN()).second;
+                /*
+                    this below and the matching line of code for dvd were used for debugging
+                    a major issue with returning items that i was having
+                */
                 //std::cout << "Book to return: " << bookToReturn.getTitle() << std::endl;
                 l.returnBorrowedItem<Book>(bookToReturn);
             }
 
-            std::cout << "\e[1;1H\e[2J" << std::endl;
+            std::cout << "\e[1;1H\e[2J";
 
             break;
         }
         case 2:{
+            //dvd
             int choice;
             std::cout << "Currently borrowed DVDs: " << std::endl;
-            displayBorrowedDVDs();
+            displayBorrowedItems<DVD>();
             std::cout << "0. Return to menu" << std::endl;
             std::cin >> choice;
 
+            std::cout << "\e[1;1H\e[2J";
+
             if(choice == 0){
-                std::cout << "\e[1;1H\e[2J" << std::endl;
                 processInitialMenu();
             }else{
                 DVD dvdToReturn = l.findItemByID<DVD>(currentUser.getBorrowedItems<DVD>()[choice-1].getID()).second;
@@ -316,33 +398,32 @@ void returnItem(){
                 l.returnBorrowedItem<DVD>(dvdToReturn);
             }
 
-            std::cout << "\e[1;1H\e[2J" << std::endl;
+            std::cout << "\e[1;1H\e[2J";
 
             break;
         }
     }
 }
 
-void displayBorrowedBooks(){
-    if(currentUser.getBorrowedItems<Book>().size() == 0){
-        std::cout << "You have no borrowed books" << std::endl;
+/*
+template function where T is either class book or dvd,
+to display the current users borrowed items
+*/
+template <typename T> void displayBorrowedItems(){
+    std::vector<T> currentBorrowedItems = getItemContainer<T>();
+
+    if(currentBorrowedItems.size() == 0){
+        std::cout << "You have no borrowed Items" << std::endl;
     }else{
-        for(size_t i = 0; i < currentUser.getBorrowedItems<Book>().size(); i++){
-            std::cout << i+1 << ". " << currentUser.getBorrowedItems<Book>()[i].getTitle() << std::endl;
+        for(size_t i = 0; i < currentBorrowedItems.size(); i++){
+            std::cout << i+1 << ". " << currentBorrowedItems[i].getTitle() << std::endl;
         }
     }
 }
 
-void displayBorrowedDVDs(){
-    if(currentUser.getBorrowedItems<DVD>().size() == 0){
-        std::cout << "You have no borrowed DVDs" << std::endl;
-    }else{
-        for(size_t i = 0; i < currentUser.getBorrowedItems<DVD>().size(); i++){
-            std::cout << i+1 << ". " << currentUser.getBorrowedItems<DVD>()[i].getTitle() << std::endl;
-        }
-    }
-}
-
+/*
+function to process the initial menu with all options on
+what the user can do*/
 void processInitialMenu(){
     bool finish = 0;
     int input;
@@ -350,32 +431,38 @@ void processInitialMenu(){
     while(!finish){
         displayInitialMenu();
         std::cin >> input;
+        std::cout << "\e[1;1H\e[2J";
         switch(input){
             case 0:{
+                //save and exit
                 l.writeInventory();
                 l.writeUsers();
                 finish = 1;
                 break;
             }
             case 1:{
+                //add/remove item from library
                 std::cout << "\n";
                 addRemoveItemMenu();
                 break;
             }
             case 2:{
+                //set the current user
                 std::cout << "\n";
                 setCurrentUser();
                 break;
             }
             case 3:{
+                //borrow/return item, if it is empty gives an error and returns to menu
                 if(currentUser.isEmpty()){
-                    std::cout << "No user selected, please select one first" << std::endl;
+                    std::cout << "No user selected, please select one first\n" << std::endl;
                     break;
                 }
                 borrowReturnItem();
                 break;
             }
             case 4:{
+                //display all available items of a specific type
                 std::cout << "\n";
                 int itemChoice;
                 std::cout << "Items to display" << std::endl;
@@ -383,6 +470,8 @@ void processInitialMenu(){
                 std::cout << "2. DVDs" << std::endl;
 
                 std::cin >> itemChoice;
+
+                std::cout << "\e[1;1H\e[2J";
 
                 switch(itemChoice){
                     case 1:{
@@ -397,12 +486,33 @@ void processInitialMenu(){
                 break;
             }
             case 5:{
+                //search through items
                 std::cout << "\n";
                 searchItemByTitle();
+                break;
+            }
+            case 6:{
+                l.writeInventory();
+                l.writeUsers();
                 break;
             }
         }
     }
 }
 
-//printf("\e[1;1H\e[2J");
+/*
+template helper function to get borrowed items
+from user depending on what is needed
+*/
+template <typename T> std::vector<T> getItemContainer(){
+    if constexpr(std::is_same_v<T,Book>){
+        return currentUser.getBorrowedItems<Book>();
+    }else if constexpr(std::is_same_v<T, DVD>){
+        return currentUser.getBorrowedItems<DVD>();
+    }else{
+    }
+}
+
+//explicit instantiation of template functions
+template void displayBorrowedItems<Book>();
+template void displayBorrowedItems<DVD>();

@@ -1,3 +1,9 @@
+/* 
+    Name: Ben Houghton
+    Matric Number: 2498662
+    Module Code: AC21008
+*/
+
 #pragma once
 
 #include <vector>
@@ -10,7 +16,7 @@
 class User{
     public:
         User();
-        //~User();
+
         template <typename T> void addNewBorrowedItem(T newItem);
         template <typename T> void returnItem(int pos);
         template <typename T> std::vector<T> getBorrowedItems();
@@ -24,6 +30,7 @@ class User{
         void setID(int newUserID);
         void setName(std::string newName);
 
+        //overloading operator to be able to compare users for vector
         bool operator==(const User& other) const {
             return userID == other.userID && name == other.name && borrowedBooks == other.borrowedBooks && borrowedDVDs == other.borrowedDVDs;
         }
@@ -32,5 +39,5 @@ class User{
         std::string name;
         std::vector<Book> borrowedBooks;
         std::vector<DVD> borrowedDVDs;
-        template <typename T> std::pair<std::vector<T>*, int> getItemContainer();
+        template <typename T> std::vector<T>* getItemContainer();
 };

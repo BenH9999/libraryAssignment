@@ -1,3 +1,9 @@
+/* 
+    Name: Ben Houghton
+    Matric Number: 2498662
+    Module Code: AC21008
+*/
+
 #include "Book.hpp"
 
 Book::Book(){
@@ -5,15 +11,17 @@ Book::Book(){
     author = "";
 }
 
+/*
+main constructor used
+*/
 Book::Book(std::string isbn,std::string title, std::string author, bool available) : Item(title,available){   
     this->ISBN = isbn;
     this->author = author;
 }
 
-//std::string Book::getTitle(){
-    //return this->title;
-//}
-
+/*
+getters
+*/
 std::string Book::getAuthor(){
     return this->author;
 }
@@ -22,6 +30,9 @@ std::string Book::getISBN(){
     return this->ISBN;
 }
 
+/*
+setters
+*/
 void Book::setAuthor(std::string newAuthor){
     this->author = newAuthor;
 }

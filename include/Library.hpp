@@ -1,3 +1,9 @@
+/* 
+    Name: Ben Houghton
+    Matric Number: 2498662
+    Module Code: AC21008
+*/
+
 #pragma once
 
 #include "User.hpp"
@@ -5,7 +11,6 @@
 class Library{
     public:
         Library();
-        //~Library();
 
         template <typename T> void addNewItem(T newItem);
         template <typename T> void deleteItem(T itemToDelete);
@@ -29,7 +34,7 @@ class Library{
         std::vector<User> users;
         std::vector<DVD> dvds;
 
-        template <typename T> std::pair<std::vector<T>*, int> getItemContainer();
+        template <typename T> std::vector<T>* getItemContainer();
 };
 
 extern User currentUser;

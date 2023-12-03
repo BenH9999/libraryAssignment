@@ -1,3 +1,9 @@
+/* 
+    Name: Ben Houghton
+    Matric Number: 2498662
+    Module Code: AC21008
+*/
+
 #pragma once
 
 #include <iostream>
@@ -19,6 +25,7 @@ class Item{
         void setTitle(std::string newTitle);
         void setAvailable(bool newAvailable);
 
+        //overloading operator to be able to compare items for vector
         bool operator==(const Item& other) const {
             return title == other.title && available == other.available;
         }
