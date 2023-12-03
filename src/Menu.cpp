@@ -36,8 +36,8 @@ void addRemoveItemMenu(){
                     std::cout << "Enter isbn of book" << std::endl;
                     std::cin >> isbn;
 
-                    for(size_t i = 0; i < l.getBooks().size(); i++){
-                        if(l.getBooks()[i].getISBN() == isbn){
+                    for(size_t i = 0; i < l.getItems<Book>().size(); i++){
+                        if(l.getItems<Book>()[i].getISBN() == isbn){
                             std::cout << "Book already exists" << std::endl;
                             return;
                         }
@@ -162,13 +162,13 @@ void setCurrentUser(){
     }
 
     std::cout << "Borrowed Books: " << std::endl;
-    for(size_t i = 0; i < currentUser.getBorrowedBooks().size();i++){
-        std::cout << i+1 << ". " << currentUser.getBorrowedBooks()[i].getTitle() << std::endl;
+    for(size_t i = 0; i < currentUser.getBorrowedItems<Book>().size();i++){
+        std::cout << i+1 << ". " << currentUser.getBorrowedItems<Book>()[i].getTitle() << std::endl;
     }
     std::cout << "\n";
     std::cout << "Borrowed DVDs: " << std::endl;
-    for(size_t i = 0; i < currentUser.getBorrowedDVDs().size();i++){
-        std::cout << i+1 << ". " << currentUser.getBorrowedDVDs()[i].getTitle() << std::endl;
+    for(size_t i = 0; i < currentUser.getBorrowedItems<DVD>().size();i++){
+        std::cout << i+1 << ". " << currentUser.getBorrowedItems<DVD>()[i].getTitle() << std::endl;
     }
 }
 
@@ -239,8 +239,8 @@ void borrowItem(){
             }
             else{
                 size_t index = l.findItemIndex<Book>(choice);
-                Book bookToBorrow = l.findItemByID<Book>(l.getBooks()[index].getISBN()).second;
-                //std::cout << "Book to borrow: " << bookToBorrow.getTitle() << std::endl;
+                Book bookToBorrow = l.findItemByID<Book>(l.getItems<Book>()[index].getISBN()).second;
+                std::cout << "Book to borrow: " << bookToBorrow.getTitle() << std::endl;
                 l.borrowItem<Book>(bookToBorrow);
             }
 
@@ -261,7 +261,7 @@ void borrowItem(){
             }
             else{
                 size_t index = l.findItemIndex<DVD>(choice);
-                DVD dvdToBorrow = l.findItemByID<DVD>(l.getDVDs()[index].getID()).second;
+                DVD dvdToBorrow = l.findItemByID<DVD>(l.getItems<DVD>()[index].getID()).second;
                 l.borrowItem<DVD>(dvdToBorrow);
             }
             std::cout << "\e[1;1H\e[2J" << std::endl;
@@ -291,9 +291,9 @@ void returnItem(){
                 std::cout << "\e[1;1H\e[2J" << std::endl;
                 processInitialMenu();
             }else{
-                Book bookToReturn = l.findItemByID<Book>(currentUser.getBorrowedBooks()[choice-1].getISBN()).second;
+                Book bookToReturn = l.findItemByID<Book>(currentUser.getBorrowedItems<Book>()[choice-1].getISBN()).second;
                 //std::cout << "Book to return: " << bookToReturn.getTitle() << std::endl;
-                l.returnBorrowedBook(bookToReturn);
+                l.returnBorrowedItem<Book>(bookToReturn);
             }
 
             std::cout << "\e[1;1H\e[2J" << std::endl;
@@ -311,9 +311,9 @@ void returnItem(){
                 std::cout << "\e[1;1H\e[2J" << std::endl;
                 processInitialMenu();
             }else{
-                DVD dvdToReturn = l.findItemByID<DVD>(currentUser.getBorrowedDVDs()[choice-1].getID()).second;
+                DVD dvdToReturn = l.findItemByID<DVD>(currentUser.getBorrowedItems<DVD>()[choice-1].getID()).second;
                 //std::cout << "DVD to return: " << dvdToReturn.getTitle() << std::endl;
-                l.returnBorrowedDVD(dvdToReturn);
+                l.returnBorrowedItem<DVD>(dvdToReturn);
             }
 
             std::cout << "\e[1;1H\e[2J" << std::endl;
@@ -324,21 +324,21 @@ void returnItem(){
 }
 
 void displayBorrowedBooks(){
-    if(currentUser.getBorrowedBooks().size() == 0){
+    if(currentUser.getBorrowedItems<Book>().size() == 0){
         std::cout << "You have no borrowed books" << std::endl;
     }else{
-        for(size_t i = 0; i < currentUser.getBorrowedBooks().size(); i++){
-            std::cout << i+1 << ". " << currentUser.getBorrowedBooks()[i].getTitle() << std::endl;
+        for(size_t i = 0; i < currentUser.getBorrowedItems<Book>().size(); i++){
+            std::cout << i+1 << ". " << currentUser.getBorrowedItems<Book>()[i].getTitle() << std::endl;
         }
     }
 }
 
 void displayBorrowedDVDs(){
-    if(currentUser.getBorrowedDVDs().size() == 0){
+    if(currentUser.getBorrowedItems<DVD>().size() == 0){
         std::cout << "You have no borrowed DVDs" << std::endl;
     }else{
-        for(size_t i = 0; i < currentUser.getBorrowedDVDs().size(); i++){
-            std::cout << i+1 << ". " << currentUser.getBorrowedDVDs()[i].getTitle() << std::endl;
+        for(size_t i = 0; i < currentUser.getBorrowedItems<DVD>().size(); i++){
+            std::cout << i+1 << ". " << currentUser.getBorrowedItems<DVD>()[i].getTitle() << std::endl;
         }
     }
 }

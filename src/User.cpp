@@ -12,20 +12,14 @@ void remove(std::vector<T>& vec, size_t pos){
     vec.erase(it);
 }
 
-void User::returnBook(int pos){
-    remove<Book>(borrowedBooks, pos);
+template <typename T> void User::returnItem(int pos){
+    std::vector<T>* borrorwedItems = getItemContainer<T>().first;
+    remove<T>((*borrorwedItems),pos);
 }
 
-void User::returnDVD(int pos){
-    remove<DVD>(borrowedDVDs, pos);
-}
-
-void User::addNewBorrowedBook(Book newBook){
-    this->borrowedBooks.push_back(newBook);
-}
-
-void User::addNewBorrowedDVD(DVD newDVD){
-    this->borrowedDVDs.push_back(newDVD);
+template <typename T> void User::addNewBorrowedItem(T newItem){
+    std::vector<T>* borrowedItems = getItemContainer<T>().first;
+    (*borrowedItems).push_back(newItem);
 }
 
 bool User::isEmpty(){
@@ -40,12 +34,10 @@ std::string User::getName(){
     return this->name;
 }
 
-std::vector<Book> User::getBorrowedBooks(){
-    return this->borrowedBooks;
-}
+template <typename T> std::vector<T> User::getBorrowedItems(){
+    std::vector<T>* borrowedItems = getItemContainer<T>().first;
 
-std::vector<DVD> User::getBorrowedDVDs(){
-    return this->borrowedDVDs;
+    return (*borrowedItems);
 }
 
 void User::setID(int newUserID){
@@ -56,10 +48,25 @@ void User::setName(std::string newName){
     this->name = newName;
 }
 
-void User::setBorrowedBooks(std::vector<Book> newBorrowedBooks){
-    this->borrowedBooks = newBorrowedBooks;
+template <typename T> void User::setBorrowedItems(std::vector<T> newBorrowedItems){
+    std::vector<T>* borrowedItems = getItemContainer<T>().first;
+    (*borrowedItems) = newBorrowedItems;
 }
 
-void User::setBorrowedDVDs(std::vector<DVD> newBorrowedDVDs){
-    this->borrowedDVDs = newBorrowedDVDs;
+template <typename T> std::pair<std::vector<T>*, int> User::getItemContainer(){
+    if constexpr(std::is_same_v<T,Book>){
+        return std::make_pair(&borrowedBooks, BOOK);
+    }else if constexpr(std::is_same_v<T, DVD>){
+        return std::make_pair(&borrowedDVDs,DVDs);
+    }else{
+    }
 }
+
+template void User::returnItem<Book>(int pos);
+template void User::returnItem<DVD>(int pos);
+template std::vector<Book> User::getBorrowedItems<Book>();
+template std::vector<DVD> User::getBorrowedItems<DVD>();
+template void User::setBorrowedItems<Book>(std::vector<Book> newBorrowedItems);
+template void User::setBorrowedItems<DVD>(std::vector<DVD> newBorrowedItems);
+template void User::addNewBorrowedItem<Book>(Book newItem);
+template void User::addNewBorrowedItem<DVD>(DVD newItem);

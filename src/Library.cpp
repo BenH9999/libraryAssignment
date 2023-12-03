@@ -9,9 +9,9 @@ template <typename T> void Library::borrowItem(T newItem){
     std::pair<std::vector<T>*, int> items = getItemContainer<T>();
 
     if constexpr (std::is_same_v<T, Book>) {
-        currentUser.addNewBorrowedBook(newItem);
+        currentUser.addNewBorrowedItem<Book>(newItem);
     } else if constexpr (std::is_same_v<T, DVD>) {
-        currentUser.addNewBorrowedDVD(newItem);
+        currentUser.addNewBorrowedItem<DVD>(newItem);
     }
 
     for(size_t i = 0; i < items.first->size();i++){
@@ -21,35 +21,21 @@ template <typename T> void Library::borrowItem(T newItem){
     }
 }
 
-void Library::returnBorrowedBook(Book oldBook){
-    for(size_t i = 0; i < currentUser.getBorrowedBooks().size();i++){
-        if(currentUser.getBorrowedBooks()[i] == oldBook){
-            currentUser.returnBook(i);
+template <typename T> void Library::returnBorrowedItem(T oldItem){
+    std::pair<std::vector<T>*, int> items = getItemContainer<T>();
+
+    for(size_t i = 0; i < currentUser.getBorrowedItems<T>().size(); i++){
+        if(currentUser.getBorrowedItems<T>()[i] == oldItem){
+            currentUser.returnItem<T>(i);
         }
     }
 
-    std::vector<Book>::iterator libraryIT = std::find(books.begin(),books.end(), oldBook);
-    if(libraryIT != books.end()){
+    typename std::vector<T>::iterator libraryIT = std::find(items.first->begin(),items.first->end(),oldItem);
+    if(libraryIT != items.first->end()){
         libraryIT->setAvailable(1);
-        std::cout << "Book returned\n" << std::endl;
+        std::cout << "Item returned\n" << std::endl;
     }else{
-        std::cerr << "Error: Book not found in library" << std::endl;
-    }
-}
-
-void Library::returnBorrowedDVD(DVD oldDVD){
-    for(size_t i = 0; i < currentUser.getBorrowedDVDs().size();i++){
-        if(currentUser.getBorrowedDVDs()[i] == oldDVD){
-            currentUser.returnDVD(i);
-        }
-    }
-
-    std::vector<DVD>::iterator libraryIT = std::find(dvds.begin(),dvds.end(), oldDVD);
-    if(libraryIT != dvds.end()){
-        libraryIT->setAvailable(1);
-        std::cout << "Book returned\n" << std::endl;
-    }else{
-        std::cerr << "Error: DVD not found in library" << std::endl;
+        std::cerr << "Error: Item not found in library" << std::endl;
     }
 }
 
@@ -100,8 +86,8 @@ void Library::writeInventory(){
 void Library::syncUserChanges(){
     for(size_t i = 0; i < users.size(); i++){
         if(users[i].getID() == currentUser.getID()){
-            users[i].setBorrowedBooks(currentUser.getBorrowedBooks());
-            users[i].setBorrowedDVDs(currentUser.getBorrowedDVDs());
+            users[i].setBorrowedItems<Book>(currentUser.getBorrowedItems<Book>());
+            users[i].setBorrowedItems<DVD>(currentUser.getBorrowedItems<DVD>());
             break;
         }
     }
@@ -161,11 +147,11 @@ void Library::writeUsers(){
     for(size_t i = 0; i < users.size(); i++){
         file << users[i].getID() << " ";
         file << users[i].getName();
-        for(size_t j = 0; j < users[i].getBorrowedBooks().size();j++){
-            file << " " << users[i].getBorrowedBooks()[j].getISBN();
+        for(size_t j = 0; j < users[i].getBorrowedItems<Book>().size();j++){
+            file << " " << users[i].getBorrowedItems<Book>()[j].getISBN();
         }
-        for(size_t j = 0; j < users[i].getBorrowedDVDs().size();j++){
-            file << " " << users[i].getBorrowedDVDs()[j].getID();
+        for(size_t j = 0; j < users[i].getBorrowedItems<DVD>().size();j++){
+            file << " " << users[i].getBorrowedItems<DVD>()[j].getID();
         }
         if(i != users.size()-1)file << "\n";
     }
@@ -196,7 +182,7 @@ void Library::readUsers(){
                 std::pair<bool,Book> borrowedBook = findItemByID<Book>(isbnOrDVDID);
 
                 if(borrowedBook.first){
-                    user.addNewBorrowedBook(borrowedBook.second);
+                    user.addNewBorrowedItem<Book>(borrowedBook.second);
                 }else {
                     std::cerr << "Error: Book with ISBN " << isbnOrDVDID << " not found." << std::endl;
                 }
@@ -205,7 +191,7 @@ void Library::readUsers(){
                 std::pair<bool,DVD> borrowedDVD = findItemByID<DVD>(dvdID);
 
                 if(borrowedDVD.first){
-                    user.addNewBorrowedDVD(borrowedDVD.second);
+                    user.addNewBorrowedItem<DVD>(borrowedDVD.second);
                 }else {
                     std::cerr << "Error: DVD with ID " << dvdID << " not found." << std::endl;
                 }
@@ -272,8 +258,8 @@ void Library::displayAllUsers(){
         std::cout << this->users[i].getID() << std::endl;
         std::cout << this->users[i].getName() << std::endl;
         std::cout << "Books: " << std::endl;
-        for(size_t j = 0; j < this->users[i].getBorrowedBooks().size(); j++){
-            std::cout << this->users[i].getBorrowedBooks()[j].getTitle() << std::endl;
+        for(size_t j = 0; j < this->users[i].getBorrowedItems<Book>().size(); j++){
+            std::cout << this->users[i].getBorrowedItems<Book>()[j].getTitle() << std::endl;
         }
         std::cout << "\n";
     }
@@ -297,28 +283,14 @@ template <typename T> void Library::deleteItem(T itemToDelete){
     }
 }
 
-std::vector<Book> Library::getBooks(){
-    return this->books;
+template <typename T> std::vector<T> Library::getItems(){
+    std::vector<T>* items = getItemContainer<T>().first;
+    return (*items);
 }
 
-std::vector<User> Library::getUsers(){
-    return this->users;
-}
-
-std::vector<DVD> Library::getDVDs(){
-    return this->dvds;
-}
-
-void Library::setBooks(std::vector<Book> newBooks){
-    this->books = newBooks;
-}
-
-void Library::setUsers(std::vector<User> newUsers){
-    this->users = newUsers;
-}
-
-void Library::setDVDs(std::vector<DVD> newDVDs){
-    this->dvds = newDVDs;
+template <typename T> void Library::setItems(std::vector<T> newItems){
+    std::vector<T>* items = getItemContainer<T>().first;
+    (*items) = newItems;
 }
 
 template <typename T> std::pair<std::vector<T>*, int> Library::getItemContainer(){
@@ -350,3 +322,11 @@ template size_t Library::findItemIndex<Book>(size_t choice);
 template size_t Library::findItemIndex<DVD>(size_t choice);
 template void Library::borrowItem<Book>(Book newItem);
 template void Library::borrowItem<DVD>(DVD newItem);
+template void Library::returnBorrowedItem<Book>(Book oldItem);
+template void Library::returnBorrowedItem<DVD>(DVD oldItem);
+template std::vector<Book> Library::getItems<Book>();
+template std::vector<DVD> Library::getItems<DVD>();
+template std::vector<User> Library::getItems<User>();
+template void Library::setItems<Book>(std::vector<Book> newItems);
+template void Library::setItems<DVD>(std::vector<DVD> newItems);
+template void Library::setItems<User>(std::vector<User> newItems);

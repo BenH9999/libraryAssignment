@@ -11,21 +11,18 @@ class User{
     public:
         User();
         //~User();
-        void addNewBorrowedBook(Book newBook);
-        void addNewBorrowedDVD(DVD newDVD);
-        void returnBook(int pos);
-        void returnDVD(int pos);
+        template <typename T> void addNewBorrowedItem(T newItem);
+        template <typename T> void returnItem(int pos);
+        template <typename T> std::vector<T> getBorrowedItems();
+        template <typename T> void setBorrowedItems(std::vector<T> newBorrowedItems);
+
         bool isEmpty();
 
         int getID();
         std::string getName();
-        std::vector<Book> getBorrowedBooks();
-        std::vector<DVD> getBorrowedDVDs();
 
         void setID(int newUserID);
         void setName(std::string newName);
-        void setBorrowedBooks(std::vector<Book> newBorrowedBooks);
-        void setBorrowedDVDs(std::vector<DVD> addNewBorrowedDVDs);
 
         bool operator==(const User& other) const {
             return userID == other.userID && name == other.name && borrowedBooks == other.borrowedBooks && borrowedDVDs == other.borrowedDVDs;
@@ -35,4 +32,5 @@ class User{
         std::string name;
         std::vector<Book> borrowedBooks;
         std::vector<DVD> borrowedDVDs;
+        template <typename T> std::pair<std::vector<T>*, int> getItemContainer();
 };
