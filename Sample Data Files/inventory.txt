@@ -3,6 +3,7 @@
 0 978-3-4567-8912-3 "1984" "George Orwell" 1
 0 978-4-5678-9123-4 "The Great Gatsby" "F. Scott Fitzgerald" 1
 0 978-5-6789-1234-5 "Pride and Prejudice" "Jane Austen" 0
-0 978-6-7891-2345-6 "The Hobbit" "J.R.R. Tolkien" 0
+0 978-6-7891-2345-6 "The Hobbit" "J.R.R. Tolkien" 1
 0 978-7-8912-3456-7 "Animal Farm" "George Orwell" 0
+0 978-0061059062 "Jingo" "Terry Pratchett" 1
 1 "Titanic" 1 "Romance" 7.9 0 

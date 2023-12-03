@@ -77,15 +77,18 @@ void addRemoveItemMenu(){
                     }
 
                     std::cout << "Enter title of book" << std::endl;
-                    std::cin >> title;
+                    std::cin.ignore();
+                    std::getline(std::cin, title);
 
                     std::cout << "Enter author of book" << std::endl;
-                    std::cin >> author;
+
+                    std::cin.ignore();
+                    std::getline(std::cin, author);
 
                     Book newBook(isbn,title,author,1);
                     l.addNewItem<Book>(newBook);
 
-                    std::cout << "\e[1;1H\e[2J";
+                    //std::cout << "\e[1;1H\e[2J";
                     std::cout << "Added book" << std::endl;
 
                     break;
@@ -107,10 +110,12 @@ void addRemoveItemMenu(){
                     }
 
                     std::cout << "Enter title of DVD" << std::endl;
-                    std::cin >> title;
+                    std::cin.ignore();
+                    std::getline(std::cin, title);
 
                     std::cout << "Enter genre of DVD" << std::endl;
-                    std::cin >> genre;
+                    std::cin.ignore();
+                    std::getline(std::cin, genre);
 
                     std::cout << "Enter rating of DVD" << std::endl;
                     std::cin >> rating;
