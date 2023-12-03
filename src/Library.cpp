@@ -315,6 +315,30 @@ template <typename T> void Library::displayAvailableItems(){
     }
 }
 
+void Library::createNewUser(){
+    int newUserID;
+    std::string newName;
+    bool valid = 0;
+    std::cout << "Enter id of new user" << std::endl;
+
+    while(!valid){
+        std::cin >> newUserID;
+        if(findItemByID<User>(newUserID).first){
+            std::cout << "User id already taken please enter another" << std::endl;
+        }else{
+            valid = 1;
+        }
+    }
+    std::cout << "Enter name" << std::endl;
+    std::cin >> newName;
+
+    User newUser;
+    newUser.setID(newUserID);
+    newUser.setName(newName);
+
+    this->users.push_back(newUser);
+}
+
 /*
 display all users function, i believe this was just for testing and isnt actually used anywhere
 but it works

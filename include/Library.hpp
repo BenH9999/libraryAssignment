@@ -27,6 +27,7 @@ class Library{
         void writeInventory();
         void readUsers();
         void writeUsers();
+        void createNewUser();
         std::string readQuotedString(std::istringstream& iss);
         void syncUserChanges();
     private:

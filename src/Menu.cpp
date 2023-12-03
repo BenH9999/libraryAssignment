@@ -22,6 +22,7 @@ void displayInitialMenu(){
     std::cout << "4. Display Library" << std::endl;
     std::cout << "5. Search Through Library" << std::endl;
     std::cout << "6. Save current Library Books and Users to file" << std::endl;
+    std::cout << "7. Create new user" << std::endl;
     std::cout << "0. Save and Exit" << std::endl;
 }
 
@@ -530,6 +531,10 @@ void processInitialMenu(){
             case 6:{
                 l.writeInventory();
                 l.writeUsers();
+                break;
+            }
+            case 7:{
+                l.createNewUser();
                 break;
             }
         }
