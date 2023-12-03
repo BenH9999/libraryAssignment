@@ -8,11 +8,7 @@ Library::Library(){
 template <typename T> void Library::borrowItem(T newItem){
     std::pair<std::vector<T>*, int> items = getItemContainer<T>();
 
-    if constexpr (std::is_same_v<T, Book>) {
-        currentUser.addNewBorrowedItem<Book>(newItem);
-    } else if constexpr (std::is_same_v<T, DVD>) {
-        currentUser.addNewBorrowedItem<DVD>(newItem);
-    }
+    currentUser.addNewBorrowedItem<T>(newItem);
 
     for(size_t i = 0; i < items.first->size();i++){
         if(newItem == items.first->at(i)){
