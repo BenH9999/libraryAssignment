@@ -41,6 +41,10 @@ void addRemoveItemMenu(){
     item to add/remove
      */
     switch(input){
+        default:{
+            std::cout << "Invalid input" << std::endl;
+            break;
+        }
         //Adding an item
         case 1:{
             int itemChoice;
@@ -52,6 +56,10 @@ void addRemoveItemMenu(){
             std::cout << "\e[1;1H\e[2J";
 
             switch(itemChoice){
+                default:{
+                std::cout << "Invalid input" << std::endl;
+                break;
+            }
                 //book
                 case 1:{
                     std::string title, author, isbn;
@@ -128,6 +136,10 @@ void addRemoveItemMenu(){
             std::cout << "\e[1;1H\e[2J";
 
             switch(itemChoice){
+                default:{
+                    std::cout << "Invalid input" << std::endl;
+                    break;
+                }
                 //book
                 case 1:{
                     std::string isbn;
@@ -242,6 +254,10 @@ void searchItemByTitle(){
     std::cout << "\e[1;1H\e[2J";
 
     switch(itemChoice){
+        default:{
+            std::cout << "Invalid input" << std::endl;
+            break;
+        }
         case 1:{
             l.searchItem<Book>(title);
             break;
@@ -265,6 +281,10 @@ void borrowReturnItem(){
 
     std::cout << "\e[1;1H\e[2J";
     switch(input){
+        default:{
+            std::cout << "Invalid input" << std::endl;
+            break;
+        }
         case 1:{
             borrowItem();
             break;
@@ -292,6 +312,10 @@ void borrowItem(){
 
     std::cout << "\e[1;1H\e[2J";
     switch(itemChoice){
+        default:{
+            std::cout << "Invalid input" << std::endl;
+            break;
+        }
         case 1:{
             //book
             size_t choice;
@@ -355,6 +379,10 @@ void returnItem(){
 
     std::cout << "\e[1;1H\e[2J";
     switch(itemChoice){
+        default:{
+            std::cout << "Invalid input" << std::endl;
+            break;
+        }
         case 1:{
             //book
             int choice;
@@ -433,6 +461,10 @@ void processInitialMenu(){
         std::cin >> input;
         std::cout << "\e[1;1H\e[2J";
         switch(input){
+            default:{
+                std::cout << "Invalid input" << std::endl;
+                break;
+            }
             case 0:{
                 //save and exit
                 l.writeInventory();
@@ -468,12 +500,16 @@ void processInitialMenu(){
                 std::cout << "Items to display" << std::endl;
                 std::cout << "1. Books" << std::endl;
                 std::cout << "2. DVDs" << std::endl;
-
+                
                 std::cin >> itemChoice;
 
                 std::cout << "\e[1;1H\e[2J";
 
                 switch(itemChoice){
+                    default:{
+                        std::cout << "Invalid input" << std::endl;
+                        break;
+                    }
                     case 1:{
                         l.displayAvailableItems<Book>();
                         break;
