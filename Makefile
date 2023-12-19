@@ -1,2 +1,2 @@
 all:
-	g++ -Iinclude -o main src/*.cpp -Wall
+	g++ -Iinclude -Iinclude/header -Iinclude/raylib -Llib -o main src/*.cpp -lraylib -lopengl32 -lgdi32 -lwinmm -Wall
