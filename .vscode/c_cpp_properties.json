@@ -5,7 +5,10 @@
             "includePath": [
                 "${default}",
                 "${workspaceFolder}/include",
-                "${workspaceFolder}/include/header"
+                "${workspaceFolder}/include/header",
+                "${workspaceFolder}/include/raylib",
+                "${workspaceFolder}/include/raylib",
+                "${workspaceFolder}/include/header/Screens"
             ],
             "defines": [
                 "_DEBUG",
